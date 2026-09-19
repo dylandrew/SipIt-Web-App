@@ -49,7 +49,9 @@
 		var timeout = setTimeout(function () { controller.abort(); }, 25000);
 		fetch(form.action, { method: 'POST', body: formData, signal: controller.signal }).then(async function (response) {
 			clearTimeout(timeout);
-			var result = await response.json();
+						var text = await response.text();
+						var result = {};
+						try { result = text ? JSON.parse(text) : {}; } catch (parseError) {}
 			if (!response.ok || result.success === false) throw new Error(result.message || 'Email delivery failed.');
 			return result;
 				}).then(function (result) { status.textContent = result.message || 'Thanks, ' + name + '! We will confirm your table shortly.'; if (result.success) form.reset(); }).catch(function (error) { clearTimeout(timeout); status.textContent = error.name === 'AbortError' ? 'The email server did not respond within 25 seconds. Please try again or check the Render logs.' : (error.message || 'Email delivery failed. Check the server configuration.'); });
