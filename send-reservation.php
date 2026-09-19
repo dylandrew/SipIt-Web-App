@@ -41,6 +41,8 @@ try {
         ? PHPMailer::ENCRYPTION_SMTPS
         : PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = (int)(getenv('BLUDIT_SMTP_PORT') ?: 587);
+    $mail->Timeout = 20;
+    $mail->Timelimit = 25;
     $mail->CharSet = 'UTF-8';
     $mail->setFrom($gmailAddress, 'Sip It Coffee Shop');
     $mail->addAddress($recipientAddress, 'Sip It Coffee Shop');
